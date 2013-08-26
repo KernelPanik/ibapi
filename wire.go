@@ -54,7 +54,11 @@ func (m *replyReader) readString() string {
 }
 
 func (m *replyReader) readInt() int64 {
-	i, err := strconv.ParseInt(m.readString(), 10, 64)
+	s := m.readString()
+	if len(s) == 0 {
+		return 0
+	}
+	i, err := strconv.ParseInt(s, 10, 64)
 
 	if err != nil {
 		panic(err)
@@ -64,7 +68,11 @@ func (m *replyReader) readInt() int64 {
 }
 
 func (m *replyReader) readFloat() float64 {
-	f, err := strconv.ParseFloat(m.readString(), 64)
+	s := m.readString()
+	if len(s) == 0 {
+		return 0
+	}
+	f, err := strconv.ParseFloat(s, 64)
 
 	if err != nil {
 		panic(err)
