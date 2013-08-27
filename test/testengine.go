@@ -16,12 +16,30 @@ func main() {
 
 	dumpReplies(e)
 
-	writeRequest(e, &ibapi.MsgOutReqContractData{ReqId:100, Symbol:"DBK", SecurityType:"STK", Exchange:"FWB"})
-
+	/*
+	writeRequest(e, &ibapi.MsgOutReqContractData{ReqId:101, Symbol:"DBK", SecurityType:"STK", Exchange:"FWB"})
 	<-time.After(time.Second * 10)
+
 	writeRequest(e, &ibapi.MsgOutReqContractData{ReqId:101, Symbol:"IBM", SecurityType:"STK", Exchange:"NYSE"})
-
 	<-time.After(time.Second * 10)
+	*/
+
+	writeRequest(e, &ibapi.MsgOutReqHistData{
+		ReqId:100,
+		Symbol:"USD",
+		SecurityType:"CASH",
+		Exchange:"IDEALPRO",
+		Currency:"JPY",
+		EndDateTime:time.Now(),
+		Duration:"1 D",
+		BarSizeSetting:"15 mins",
+		WhatToShow:ibapi.WhatToShowMidpoint,
+		UseRTH:false,
+		FormatDate:ibapi.FormatDateString,
+	})
+	<-time.After(time.Second * 20)
+
+	/*
 	writeRequest(e, &ibapi.MsgOutReqMktData{
 		TickerId:1,
 		Symbol:"USD",
@@ -29,8 +47,9 @@ func main() {
 		Exchange:"IDEALPRO",
 		Currency:"JPY",
 	})
+	<-time.After(time.Second * 10)
+	*/
 
-	<-time.After(time.Second * 20)
 	e.Stop()
 }
 

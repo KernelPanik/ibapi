@@ -13,7 +13,9 @@ import (
 	"log"
 )
 
-const ibTimeFormat = "20060102 15:04:05 MST"
+// TODO: treat times better (too many formats used by API) - use a tag for time format?
+const ibTimeFormatIn = "20060102 15:04:05 MST"
+const ibTimeFormatOut = "20060102 15:04:05"
 
 var (
 	ErrUnknownReplyCode   = errors.New("Unknown Reply Code")
@@ -86,7 +88,7 @@ func (m *replyReader) readBool() bool {
 }
 
 func (m *replyReader) readTime() time.Time {
-	t, err := time.Parse(ibTimeFormat, m.readString())
+	t, err := time.Parse(ibTimeFormatIn, m.readString())
 
 	if err != nil {
 		panic(err)
@@ -218,7 +220,7 @@ func (m *requestBytes) writeBool(v bool) {
 }
 
 func (m *requestBytes) writeTime(v time.Time) {
-	m.writeString(v.Format(ibTimeFormat))
+	m.writeString(v.Format(ibTimeFormatOut))
 }
 
 func (m *requestBytes) writeField(i interface{}, minVer int64) {
@@ -237,25 +239,25 @@ func (m *requestBytes) writeField(i interface{}, minVer int64) {
 		m.writeBool(v)
 	case time.Time:
 		m.writeTime(v)
-	}
-
-	t := reflect.TypeOf(i)
-	v := reflect.ValueOf(i)
-	switch t.Kind() {
-	case reflect.Slice:
-		// send size and iterate
-		size := v.Len()
-		m.writeInt(int64(size))
-		for j := 0; j < size; j++ {
-			elem := v.Index(j).Interface()
-			m.writeField(elem, 0)
-		}
-	case reflect.Ptr:
-		if reflect.TypeOf(reflect.Indirect(v)).Kind() == reflect.Struct {
+	default:
+		t := reflect.TypeOf(i)
+		val := reflect.ValueOf(i)
+		switch t.Kind() {
+		case reflect.Slice:
+			// send size and iterate
+			size := val.Len()
+			m.writeInt(int64(size))
+			for j := 0; j < size; j++ {
+				elem := val.Index(j).Interface()
+				m.writeField(elem, 0)
+			}
+		case reflect.Ptr:
+			if reflect.TypeOf(reflect.Indirect(val)).Kind() == reflect.Struct {
+				m.writeStruct(i)
+			}
+		case reflect.Struct:
 			m.writeStruct(i)
 		}
-	case reflect.Struct:
-		m.writeStruct(i)
 	}
 }
 
@@ -324,6 +326,8 @@ func reqCode(i interface{}) int64 {
 		return mOutRequestContractData
 	case *MsgOutReqMktDataType:
 		return mOutRequestMarketDataType
+	case *MsgOutReqHistData:
+		return mOutRequestHistoricalData
 	}
 	return -1
 }
@@ -334,12 +338,15 @@ func reqVersion(i interface{}) int64 {
 		return 9
 	case *MsgOutReqContractData:
 		return 6
+	case *MsgOutReqHistData:
+		return 4
 	}
 	return 1
 }
 
 func repStruct(code int64) interface{} {
 	switch code {
+	// market data
 	case mInTickPrice:
 		return &MsgInTickPrice{}
 	case mInTickSize:
@@ -356,6 +363,10 @@ func repStruct(code int64) interface{} {
 		return &MsgInTickSnapshotEnd{}
 	case mInMarketDataType:
 		return &MsgInMarketDataType{}
+	// hist data
+	case mInHistoricalData:
+		return &MsgInHistData{}
+	// contract data
 	case mInContractData:
 		return &MsgInContractData{}
 	case mInContractDataEnd:
