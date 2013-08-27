@@ -32,7 +32,7 @@ func main() {
 		Currency:"JPY",
 		EndDateTime:time.Now(),
 		Duration:"1 D",
-		BarSizeSetting:"15 mins",
+		BarSizeSetting:ibapi.BarSize15Min,
 		WhatToShow:ibapi.WhatToShowMidpoint,
 		UseRTH:false,
 		FormatDate:ibapi.FormatDateString,

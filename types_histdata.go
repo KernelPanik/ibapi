@@ -38,7 +38,7 @@ type MsgOutReqHistData struct {
 	IncludeExpired string `minVer:"31"`
 	EndDateTime time.Time `minVer:"20"`
 	BarSizeSetting string `minVer:"20"`
-	Duration string
+	Duration string // format is "x S|D|W|M|Y" where x is integer, sec/day/week/mon/year
 	UseRTH bool
 	WhatToShow string
 	FormatDate int64 `minVer:"16"`
@@ -49,4 +49,21 @@ const (
 	FormatDateSeconds = 2
 	WhatToShowTrades = "TRADES"
 	WhatToShowMidpoint = "MIDPOINT"
+	WhatToShowBid = "BID"
+	WhatToShowAsk = "ASK"
+	WhatToShowBidAsk = "BID_ASK"
+	WhatToShowHistVol = "HISTORICAL_VOLATILITY"
+	WhatToShowImpVol = "OPTION_IMPLIED_VOLATILITY"
+	BarSize1Sec = "1 sec"
+	BarSize5Sec = "5 secs"
+	BarSize15Sec = "15 secs"
+	BarSize30Sec = "30 secs"
+	BarSize1Min = "1 min"
+	BarSize2Min = "2 mins"
+	BarSize3Min = "3 mins"
+	BarSize5Min = "5 mins"
+	BarSize15Min = "15 mins"
+	BarSize30Min = "30 mins"
+	BarSize1Hr = "1 hour"
+	BarSize1Day = "1 day"
 )
