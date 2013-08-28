@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/KernelPanik/ibapi"
+	"github.com/flammit/ibapi"
 
 	"log"
 	"time"
