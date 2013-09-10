@@ -84,7 +84,7 @@ func (e *Engine) WriteRequest(req interface{}) error {
 }
 
 func (e *Engine) writeRequestBytes() error {
-	log.Println("Writing bytes, %v", strings.Replace(e.requestBytes.String(), "\000", "-", -1))
+	log.Printf("Writing bytes, %v", strings.Replace(e.requestBytes.String(), "\000", "-", -1))
 	_, err := e.conn.Write(e.requestBytes.Bytes())
 	return err
 }

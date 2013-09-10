@@ -35,7 +35,7 @@ type MsgOutReqHistData struct {
 	PrimaryExchange string
 	Currency string
 	LocalSymbol string
-	IncludeExpired string `minVer:"31"`
+	IncludeExpired bool `minVer:"31"`
 	EndDateTime time.Time `minVer:"20"`
 	BarSizeSetting string `minVer:"20"`
 	Duration string // format is "x S|D|W|M|Y" where x is integer, sec/day/week/mon/year
@@ -64,6 +64,6 @@ const (
 	BarSize5Min = "5 mins"
 	BarSize15Min = "15 mins"
 	BarSize30Min = "30 mins"
-	BarSize1Hr = "1 hour"
+	BarSize1Hour = "1 hour"
 	BarSize1Day = "1 day"
 )

@@ -17,35 +17,45 @@ func main() {
 	dumpReplies(e)
 
 	/*
-	writeRequest(e, &ibapi.MsgOutReqContractData{ReqId:101, Symbol:"DBK", SecurityType:"STK", Exchange:"FWB"})
+	writeRequest(e, &ibapi.MsgOutReqContractData{ReqId:100, Symbol:"DBK", SecurityType:"STK", Exchange:"FWB"})
 	<-time.After(time.Second * 10)
 
 	writeRequest(e, &ibapi.MsgOutReqContractData{ReqId:101, Symbol:"IBM", SecurityType:"STK", Exchange:"NYSE"})
 	<-time.After(time.Second * 10)
 	*/
 
+	/*
+	writeRequest(e, &ibapi.MsgOutReqContractData{ReqId:103, Symbol:"ES", SecurityType:"FUT", Exchange:"GLOBEX", Expiry:"201309"})
+	<-time.After(time.Second * 10)
+	*/
+
 	writeRequest(e, &ibapi.MsgOutReqHistData{
-		ReqId:100,
-		Symbol:"USD",
-		SecurityType:"CASH",
-		Exchange:"IDEALPRO",
-		Currency:"JPY",
-		EndDateTime:time.Now(),
-		Duration:"1 D",
-		BarSizeSetting:ibapi.BarSize15Min,
-		WhatToShow:ibapi.WhatToShowMidpoint,
+		ReqId:102,
+		Symbol:"ES",
+		SecurityType:"FUT",
+		Exchange:"GLOBEX",
+		Expiry:"20121221",
+		EndDateTime:time.Date(2012, time.September, 12, 0, 0, 0, 0, time.Local),
+		Duration:"1 W",
+		BarSizeSetting:ibapi.BarSize5Min,
+		WhatToShow:ibapi.WhatToShowTrades,
 		UseRTH:false,
 		FormatDate:ibapi.FormatDateString,
+		IncludeExpired:true,
 	})
-	<-time.After(time.Second * 20)
+	<-time.After(time.Second * 60)
 
 	/*
 	writeRequest(e, &ibapi.MsgOutReqMktData{
 		TickerId:1,
-		Symbol:"USD",
-		SecurityType:"CASH",
-		Exchange:"IDEALPRO",
-		Currency:"JPY",
+		Symbol:"ES",
+		SecurityType:"FUT",
+		Exchange:"GLOBEX",
+		Expiry:"201309",
+//		Symbol:"USD",
+//		SecurityType:"CASH",
+//		Exchange:"IDEALPRO",
+//		Currency:"JPY",
 	})
 	<-time.After(time.Second * 10)
 	*/
